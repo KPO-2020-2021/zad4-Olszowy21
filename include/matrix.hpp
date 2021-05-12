@@ -7,7 +7,7 @@
 #include <cstdlib>
 #include <math.h>
 
-template< typename T = double, int SIZE = 3 > 
+template< typename T = double, int SIZE = 3 >
 class Matrix {
 
     T value[SIZE][SIZE];                  // Wartosci macierzy
@@ -24,7 +24,7 @@ public:
 
     // Vector operator * (Vector tmp) const;            // Operator mnożenia przez wektor
 
-    // Vector operator * (Matrix &tmp) const;
+    Vector<double, SIZE> operator * (Vector<double, SIZE> tmp);
 
     Matrix operator + (Matrix tmp);
 
@@ -164,27 +164,25 @@ const T &Matrix<T, SIZE>::operator [] (unsigned int index) const{
 //     return result;
 // }
 
-// /******************************************************************************
-//  |  Realizuje mnozenie macierzy przez wektor przez.                           |
-//  |  Argumenty:                                                                |
-//  |     this - pierwszy skladnik mnozenia (macierz).                           |
-//  |     tmp - drugi skladnik mnozenia (wektor)                                 |
-//  |  Zwraca:                                                                   |
-//  |      Iloczyn dwoch skladnikow przekazanych jako wskaznik                   |
-//  |      na parametr.                                                          |
-// //  */
-// template <typename T, int SIZE>
-// Vector<T, SIZE> Matrix<T, SIZE>::operator * (const Vector<T, SIZE> &tmp){
-//     Vector result;
-
-//     for(int x = 0; x < SIZE; ++x){
-//         for(int y = 0; y < SIZE; ++y){
-//             result[x] += tmp[y] * this->value[y][x];
-//         }
-//     }
-//     return result;
-// }
-
+/******************************************************************************
+ |  Realizuje mnozenie macierzy przez wektor.                                 |
+ |  Argumenty:                                                                |
+ |     this - pierwszy skladnik mnozenia (macierz).                           |
+ |     tmp - drugi skladnik mnozenia (wektor)                                 |
+ |  Zwraca:                                                                   |
+ |      Iloczyn dwoch skladnikow przekazanych jako wskaznik                   |
+ |      na parametr.                                                          |
+//  */
+template<typename T, int SIZE>
+Vector<double, SIZE> Matrix<T, SIZE>::operator * (Vector<double, SIZE> tmp){
+    Vector<double, SIZE> result;
+    for (int i = 0; i < SIZE; ++i) {
+        for (int j = 0; j < SIZE; ++j) {
+            result[i] += value[i][j] * tmp[j];
+        }
+    }
+    return result;
+}
 
 /******************************************************************************
  |  Funktor macierzy                                                          |
@@ -244,8 +242,8 @@ const T &Matrix<T, SIZE>::operator () (unsigned int row, unsigned int column) co
  |      Macierz - iloczyn dwóch podanych macierzy.                  |
  */
 template <typename T, int SIZE>
-Matrix<T, SIZE> Matrix<T, SIZE>::operator + (Matrix tmp) {
-    Matrix result;
+Matrix<T, SIZE> Matrix<T, SIZE>::operator + (Matrix<T, SIZE> tmp){
+    Matrix<T, SIZE> result;
     for (int i = 0; i < SIZE; ++i) {
         for (int j = 0; j < SIZE; ++j) {
             result(i, j) = this->value[i][j] + tmp(i, j);
