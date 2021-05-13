@@ -12,17 +12,19 @@ class Matrix {
 
     T value[SIZE][SIZE];                  // Wartosci macierzy
 
+    char axis[30];
+
+    int degrees[30];
+
 public:
 
-// Konstruktory
+// Konstruktory klasy
 
-    Matrix(T tmp[SIZE][SIZE]);            // Konstruktor klasy
+    Matrix(T tmp[SIZE][SIZE]);
 
-    Matrix();                                  // Konstruktor klasy
+    Matrix();
 
 // Metody
-
-    // Vector operator * (Vector tmp) const;            // Operator mnożenia przez wektor
 
     Vector<double, SIZE> operator * (Vector<double, SIZE> tmp);
 
@@ -33,6 +35,14 @@ public:
     const T &operator () (unsigned int row, unsigned int column) const;
 
     void obrotmacierzy(T kat);
+
+    void set_degree_axis();
+
+    void obrot_x(T kat);
+
+    void obrot_y(T kat);
+
+    void obrot_z(T kat);
 
     bool operator == (const Matrix tmp) const;
 
@@ -63,6 +73,12 @@ Matrix<T, SIZE>::Matrix() {
             value[i][j] = 0;
         }
     }
+    for (int k = 0; k < 10; ++k) {
+        axis[k] = ' ';
+    }
+    for (int l = 0; l < 10; ++l) {
+        degrees[l] = 0;
+    }
 }
 
 
@@ -82,6 +98,104 @@ Matrix<T, SIZE>::Matrix(T tmp[SIZE][SIZE]) {
     }
 }
 
+template <typename T, int SIZE>
+void set_degree_axis(){
+    std::cout << "Proszę podać oś oraz kąt obrotu wokół niej w postaci >x 30< " << std::endl;
+    for(int i = 0; i < 30; ++i){
+        std::cin >> axis[i];
+        std::cin >> degrees[i];
+        char tmp = axis[i];
+        switch(tmp)
+        {
+        case 'x':
+            std::cout << "Wczytano do osi x " << std::endl;
+            break;
+
+        case 'y':
+            std::cout << "Wczytano do osi y " << std::endl;
+            break;
+
+        case 'z':
+            std::cout << "Wczytano do osi z " << std::endl;
+            break;
+
+        case '.':
+            std::cout << "Skończono wczytywanie osi " << std::endl;
+            degrees[i] = 0;
+            i = 30;
+            break;
+
+        default:
+            axis[i] = ' ';
+            degrees[i] = 0;
+            --i;
+            std::cout << "Podano niepoprawną oś możliwe to: x, y, z " << std::endl;
+            break;
+        }
+    }
+}
+
+template <typename T, int SIZE>
+void obrot_x(T kat){
+    T rad = kat * M_PI / 180;
+    
+    if(SIZE == 3){
+        value[0][0] = cos(rad);
+        value[0][1] = -sin(rad);
+        value[0][2] = 0;
+        value[1][0] = sin(rad);
+        value[1][1] = cos(rad);
+        value[1][2] = 0;
+        value[2][0] = 0;
+        value[2][1] = 0;
+        value[2][2] = 1;
+    }
+    else{
+        std::cout << "Do not except that yet" << std::endl;
+    }
+}
+
+
+template <typename T, int SIZE>
+void obrot_y(T kat){
+    T rad = kat * M_PI / 180;
+    
+    if(SIZE == 3){
+        value[0][0] = cos(rad);
+        value[0][1] = 0;
+        value[0][2] = sin(rad);
+        value[1][0] = 0;
+        value[1][1] = 1;
+        value[1][2] = 0;
+        value[2][0] = -sin(rad);
+        value[2][1] = 0;
+        value[2][2] = cos(rad);
+    }
+    else{
+        std::cout << "Do not except that yet" << std::endl;
+    }
+}
+
+template <typename T, int SIZE>
+void obrot_z(T kat){
+    T rad = kat * M_PI / 180;
+    
+    if(SIZE == 3){
+        value[0][0] = 1;
+        value[0][1] = 0;
+        value[0][2] = 0;
+        value[1][0] = 0;
+        value[1][1] = cos(rad);
+        value[1][2] = -sin(rad);
+        value[2][0] = 0;
+        value[2][1] = sin(rad);
+        value[2][2] = cos(rad);
+    }
+    else{
+        std::cout << "Do not except that yet" << std::endl;
+    }
+}
+
 /*!
  * Realizuje obrot macierzy o zadany kat.
  * \param[in] kat - kat w stopniach jaki zostanie zmieniony w radiany a nastepnie
@@ -90,13 +204,44 @@ Matrix<T, SIZE>::Matrix(T tmp[SIZE][SIZE]) {
  */
 template <typename T, int SIZE>
 void Matrix<T, SIZE>::obrotmacierzy(T kat){
-    
-    T rad = kat * M_PI / 180;
+    char tmp;
+    int Kaciwo;
+    for(int i=0; i < 30; ++i){
+        tmp = axis[i];
 
-    value[0][0] = cos(rad);
-    value[0][1] = -sin(rad);
-    value[1][0] = sin(rad);
-    value[1][1] = cos(rad);
+        switch(tmp)
+        {
+        case 'x':
+            Kaciwo = degrees[i];
+            obrot_x(kaciwo);
+            std::cout << "Zmlucono os x " << std::endl;
+            break;
+
+        case 'y':
+            Kaciwo = degrees[i];
+            obrot_y(kaciwo);
+            std::cout << "Zmlucono os y " << std::endl;
+            break;
+
+        case 'z':
+            Kaciwo = degrees[i];
+            obrot_z(kaciwo);
+            std::cout << "Zmlucono os z " << std::endl;
+            break;
+
+        case '.':
+            std::cout << "Skończono mlucenie " << std::endl;
+            i = 30;
+            break;
+
+        default:
+            axis[i] = ' ';
+            degrees[i] = 0;
+            --i;
+            std::cout << "UNEXCPECTED VIRUS OR MY PROGRAMMING " << std::endl;
+            break;
+        }
+    }
 }
 
 /*!
@@ -145,24 +290,6 @@ const T &Matrix<T, SIZE>::operator [] (unsigned int index) const{
     return value[index][index];
 }
 
-/******************************************************************************
- |  Realizuje mnozenie macierzy przez wektor.                                 |
- |  Argumenty:                                                                |
- |      this - macierz, czyli pierwszy skladnik mnozenia,                     |
- |      v - wektor, czyli drugi skladnik mnozenia.                            |
- |  Zwraca:                                                                   |
- |      Iloczyn dwoch skladnikow przekazanych jako wektor.                    |
- */
-// template <typename T, int SIZE>
-// Vector<T, SIZE> Matrix<T, SIZE>::operator * (Vector<T, SIZE> tmp) const{
-//     Vector result;
-//     for (int i = 0; i < SIZE; ++i) {
-//         for (int j = 0; j < SIZE; ++j) {
-//             result[i] += value[i][j] * tmp[j];
-//         }
-//     }
-//     return result;
-// }
 
 /******************************************************************************
  |  Realizuje mnozenie macierzy przez wektor.                                 |
