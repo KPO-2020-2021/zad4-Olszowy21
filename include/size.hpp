@@ -1,3 +1,3 @@
 #pragma once
 
-const int SIZE = 3;
+const unsigned int SIZE = 3;

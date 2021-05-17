@@ -1,13 +1,9 @@
 #pragma once
 
 
-#include "size.hpp"
 #include "vector.hpp"
-#include <iostream>
-#include <cstdlib>
-#include <math.h>
 
-template< typename T = double, int SIZE = 3 >
+template< typename T, unsigned int SIZE >
 class Matrix {
 
     T value[SIZE][SIZE];                  // Wartosci macierzy
@@ -26,7 +22,7 @@ public:
 
 // Metody
 
-    Vector<double, SIZE> operator * (Vector<double, SIZE> tmp);
+    Vector<T, SIZE> operator * (const Vector<T, SIZE> &tmp) const;
 
     Matrix operator + (Matrix tmp);
 
@@ -34,7 +30,7 @@ public:
     
     const T &operator () (unsigned int row, unsigned int column) const;
 
-    void obrotmacierzy(T kat);
+    void obrotmacierzy();
 
     void set_degree_axis();
 
@@ -53,10 +49,10 @@ public:
 };
 
 
-template <typename T, int SIZE>
+template <typename T, unsigned int SIZE>
 std::istream &operator >> (std::istream &in, Matrix<T, SIZE> &mat);
 
-template <typename T, int SIZE>
+template <typename T, unsigned int SIZE>
 std::ostream &operator << (std::ostream &out, Matrix<T, SIZE> const &mat);
 
 /******************************************************************************
@@ -66,10 +62,10 @@ std::ostream &operator << (std::ostream &out, Matrix<T, SIZE> const &mat);
  |  Zwraca:                                                                   |
  |      Macierz wypelnione wartoscia 0.                                       |
  */
-template <typename T, int SIZE>
+template <typename T, unsigned int SIZE>
 Matrix<T, SIZE>::Matrix() {
-    for (int i = 0; i < SIZE; ++i) {
-        for (int j = 0; j < SIZE; ++j) {
+    for (unsigned int i = 0; i < SIZE; ++i) {
+        for (unsigned int j = 0; j < SIZE; ++j) {
             value[i][j] = 0;
         }
     }
@@ -89,22 +85,30 @@ Matrix<T, SIZE>::Matrix() {
  |  Zwraca:                                                                   |
  |      Macierz wypelniona wartosciami podanymi w argumencie.                 |
  */
-template <typename T, int SIZE>
+template <typename T, unsigned int SIZE>
 Matrix<T, SIZE>::Matrix(T tmp[SIZE][SIZE]) {
-    for (int i = 0; i < SIZE; ++i) {
-        for (int j = 0; j < SIZE; ++j) {
+    for (unsigned int i = 0; i < SIZE; ++i) {
+        for (unsigned int j = 0; j < SIZE; ++j) {
             value[i][j] = tmp[i][j];
         }
     }
+    for (int k = 0; k < 10; ++k) {
+        axis[k] = ' ';
+    }
+    for (int l = 0; l < 10; ++l) {
+        degrees[l] = 0;
+    }
 }
 
-template <typename T, int SIZE>
-void set_degree_axis(){
+template <typename T, unsigned int SIZE>
+void Matrix<T, SIZE>::set_degree_axis(){
+    Matrix<T, SIZE> results;
     std::cout << "Proszę podać oś oraz kąt obrotu wokół niej w postaci >x 30< " << std::endl;
     for(int i = 0; i < 30; ++i){
-        std::cin >> axis[i];
-        std::cin >> degrees[i];
-        char tmp = axis[i];
+        std::cin >> results.axis[i];
+        std::cin >> results.degrees[i];
+        char tmp;
+        tmp = results.axis[i];
         switch(tmp)
         {
         case 'x':
@@ -121,13 +125,13 @@ void set_degree_axis(){
 
         case '.':
             std::cout << "Skończono wczytywanie osi " << std::endl;
-            degrees[i] = 0;
+            results.degrees[i] = 0;
             i = 30;
             break;
 
         default:
-            axis[i] = ' ';
-            degrees[i] = 0;
+            results.axis[i] = ' ';
+            results.degrees[i] = 0;
             --i;
             std::cout << "Podano niepoprawną oś możliwe to: x, y, z " << std::endl;
             break;
@@ -135,8 +139,8 @@ void set_degree_axis(){
     }
 }
 
-template <typename T, int SIZE>
-void obrot_x(T kat){
+template <typename T, unsigned int SIZE>
+void Matrix<T, SIZE>::obrot_x(T kat){
     T rad = kat * M_PI / 180;
     
     if(SIZE == 3){
@@ -156,8 +160,8 @@ void obrot_x(T kat){
 }
 
 
-template <typename T, int SIZE>
-void obrot_y(T kat){
+template <typename T, unsigned int SIZE>
+void Matrix<T, SIZE>::obrot_y(T kat){
     T rad = kat * M_PI / 180;
     
     if(SIZE == 3){
@@ -176,8 +180,8 @@ void obrot_y(T kat){
     }
 }
 
-template <typename T, int SIZE>
-void obrot_z(T kat){
+template <typename T, unsigned int SIZE>
+void Matrix<T, SIZE>::obrot_z(T kat){
     T rad = kat * M_PI / 180;
     
     if(SIZE == 3){
@@ -202,30 +206,30 @@ void obrot_z(T kat){
  *                      przysluzy do obrotu danych macierzy.
  * 
  */
-template <typename T, int SIZE>
-void Matrix<T, SIZE>::obrotmacierzy(T kat){
+template <typename T, unsigned int SIZE>
+void Matrix<T, SIZE>::obrotmacierzy(){
     char tmp;
-    int Kaciwo;
-    for(int i=0; i < 30; ++i){
+    T Kaciwo;
+    for(int i=0; i < 30; ++i){  
         tmp = axis[i];
 
         switch(tmp)
         {
         case 'x':
             Kaciwo = degrees[i];
-            obrot_x(kaciwo);
+            obrot_x(Kaciwo);
             std::cout << "Zmlucono os x " << std::endl;
             break;
 
         case 'y':
             Kaciwo = degrees[i];
-            obrot_y(kaciwo);
+            obrot_y(Kaciwo);
             std::cout << "Zmlucono os y " << std::endl;
             break;
 
         case 'z':
             Kaciwo = degrees[i];
-            obrot_z(kaciwo);
+            obrot_z(Kaciwo);
             std::cout << "Zmlucono os z " << std::endl;
             break;
 
@@ -251,11 +255,11 @@ void Matrix<T, SIZE>::obrotmacierzy(T kat){
  * \retval true - gdy obie sa sobie rowne.
  * \retval false - w przypadku przeciwnym.
  */
-template <typename T, int SIZE>
+template <typename T, unsigned int SIZE>
 bool Matrix<T, SIZE>::operator == (const Matrix<T, SIZE> tmp) const{
     
-    for(int i = 0; i < SIZE; i++){
-        for(int j = 0; j < SIZE; j++){
+    for(unsigned int i = 0; i < SIZE; i++){
+        for(unsigned int j = 0; j < SIZE; j++){
             if(std::abs(this->value[i][j] - tmp.value[i][j]) > MIN_DIFF ){
                 return false;
             }
@@ -270,7 +274,7 @@ bool Matrix<T, SIZE>::operator == (const Matrix<T, SIZE> tmp) const{
  *                      liczby czesc tablicy wspolrzednych.
  * 
  */
-template <typename T, int SIZE>
+template <typename T, unsigned int SIZE>
 T &Matrix<T, SIZE>::operator [] (unsigned int index){
 if ( index >= SIZE*2 ) {
         std::cerr << "Error: Macierz jest poza zasiegiem!" << std::endl;
@@ -285,7 +289,7 @@ return value[index][index];
  *                      liczby czesc tablicy wspolrzednych.
  * 
  */
-template <typename T, int SIZE>
+template <typename T, unsigned int SIZE>
 const T &Matrix<T, SIZE>::operator [] (unsigned int index) const{
     return value[index][index];
 }
@@ -300,11 +304,11 @@ const T &Matrix<T, SIZE>::operator [] (unsigned int index) const{
  |      Iloczyn dwoch skladnikow przekazanych jako wskaznik                   |
  |      na parametr.                                                          |
 //  */
-template<typename T, int SIZE>
-Vector<double, SIZE> Matrix<T, SIZE>::operator * (Vector<double, SIZE> tmp){
-    Vector<double, SIZE> result;
-    for (int i = 0; i < SIZE; ++i) {
-        for (int j = 0; j < SIZE; ++j) {
+template<typename T, unsigned int SIZE>
+Vector<T, SIZE> Matrix<T, SIZE>::operator * (const Vector<T, SIZE> &tmp) const{
+    Vector<T, SIZE> result;
+    for (unsigned int i = 0; i < SIZE; ++i) {
+        for (unsigned int j = 0; j < SIZE; ++j) {
             result[i] += value[i][j] * tmp[j];
         }
     }
@@ -319,7 +323,7 @@ Vector<double, SIZE> Matrix<T, SIZE>::operator * (Vector<double, SIZE> tmp){
  |  Zwraca:                                                                   |
  |      Wartosc macierzy w danym miejscu tablicy.                             |
  */
-template <typename T, int SIZE>
+template <typename T, unsigned int SIZE>
 T &Matrix<T, SIZE>::operator () (unsigned int row, unsigned int column) {
 
     if (row >= SIZE) {
@@ -344,7 +348,7 @@ T &Matrix<T, SIZE>::operator () (unsigned int row, unsigned int column) {
  |  Zwraca:                                                                   |
  |      Wartosc macierzy w danym miejscu tablicy jako stala.                  |
  */
-template <typename T, int SIZE>
+template <typename T, unsigned int SIZE>
 const T &Matrix<T, SIZE>::operator () (unsigned int row, unsigned int column) const {
 
     if (row >= SIZE) {
@@ -368,11 +372,11 @@ const T &Matrix<T, SIZE>::operator () (unsigned int row, unsigned int column) co
  |  Zwraca:                                                                   |
  |      Macierz - iloczyn dwóch podanych macierzy.                  |
  */
-template <typename T, int SIZE>
+template <typename T, unsigned int SIZE>
 Matrix<T, SIZE> Matrix<T, SIZE>::operator + (Matrix<T, SIZE> tmp){
     Matrix<T, SIZE> result;
-    for (int i = 0; i < SIZE; ++i) {
-        for (int j = 0; j < SIZE; ++j) {
+    for (unsigned int i = 0; i < SIZE; ++i) {
+        for (unsigned int j = 0; j < SIZE; ++j) {
             result(i, j) = this->value[i][j] + tmp(i, j);
         }
     }
@@ -385,10 +389,10 @@ Matrix<T, SIZE> Matrix<T, SIZE>::operator + (Matrix<T, SIZE> tmp){
  |      in - strumien wyjsciowy,                                              |
  |      mat - macierz.                                                         |
  */
-template <typename T, int SIZE>
+template <typename T, unsigned int SIZE>
 std::istream &operator >> (std::istream &in, Matrix<T, SIZE> &tmp) {
-    for (int i = 0; i < SIZE; ++i) {
-        for (int j = 0; j < SIZE; ++j) {
+    for (unsigned int i = 0; i < SIZE; ++i) {
+        for (unsigned int j = 0; j < SIZE; ++j) {
             in >> tmp(i, j);
         }
     }
@@ -404,10 +408,10 @@ std::istream &operator >> (std::istream &in, Matrix<T, SIZE> &tmp) {
  *                     wspolrzedne na ekran.
  * 
  */
-template <typename T, int SIZE>
+template <typename T, unsigned int SIZE>
 std::ostream &operator << (std::ostream &out, const Matrix<T, SIZE> &tmp) {
-    for (int i = 0; i < SIZE; ++i) {
-        for (int j = 0; j < SIZE; ++j) {
+    for (unsigned int i = 0; i < SIZE; ++i) {
+        for (unsigned int j = 0; j < SIZE; ++j) {
             out << "| " << tmp(i, j) << " | "; //warto ustalic szerokosc wyswietlania dokladnosci liczb
         }
         std::cout << std::endl;
