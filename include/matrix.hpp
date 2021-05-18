@@ -1,8 +1,7 @@
 #pragma once
 
-
 #include "vector.hpp"
-#include "cuboid.hpp"
+
 
 template< typename T, unsigned int SIZE >
 class Matrix {
@@ -31,7 +30,7 @@ public:
     
     const T &operator () (unsigned int row, unsigned int column) const;
 
-    void obrotmacierzy(Cuboid &Miotator);
+    void obrotmacierzy();
 
     void set_degree_axis();
 
@@ -214,7 +213,7 @@ void Matrix<T, SIZE>::obrot_z(T kat){
  * 
  */
 template <typename T, unsigned int SIZE>
-void Matrix<T, SIZE>::obrotmacierzy(Cuboid &Miotator){
+void Matrix<T, SIZE>::obrotmacierzy(){
     char tmp;
     T Kaciwo;
     for(int j=0; j < 30; ++j){  
@@ -225,21 +224,21 @@ void Matrix<T, SIZE>::obrotmacierzy(Cuboid &Miotator){
             Kaciwo = degrees[j];
             obrot_x(Kaciwo);
             std::cout << "Zmlucono os x " << std::endl;
-            Miotator.throwing_Cuboid(this->value);
+            //Miotator.throwing_Cuboid(this->value);
             break;
 
         case 'y':
             Kaciwo = degrees[j];
             obrot_y(Kaciwo);
             std::cout << "Zmlucono os y " << std::endl;
-            Miotator.throwing_Cuboid(this->value);
+            //Miotator.throwing_Cuboid(this->value);
             break;
 
         case 'z':
             Kaciwo = degrees[j];
             obrot_z(Kaciwo);
             std::cout << "Zmlucono os z " << std::endl;
-            Miotator.throwing_Cuboid(this->value);
+            //Miotator.throwing_Cuboid(this->value);
             break;
 
         case '.':

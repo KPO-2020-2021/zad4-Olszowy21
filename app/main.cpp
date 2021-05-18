@@ -98,7 +98,7 @@ int main() {
               std::cin >> tmp;
 
               for(; tmp > 0; --tmp){
-                     macierz.obrotmacierzy(cuboid);
+                     macierz.obrotmacierzy();
               }
 
               if (!cuboid.ZapisWspolrzednychDoPliku( WSK_FILE )) {
