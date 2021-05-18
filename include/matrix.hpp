@@ -2,6 +2,7 @@
 
 
 #include "vector.hpp"
+#include "cuboid.hpp"
 
 template< typename T, unsigned int SIZE >
 class Matrix {
@@ -30,7 +31,7 @@ public:
     
     const T &operator () (unsigned int row, unsigned int column) const;
 
-    void obrotmacierzy();
+    void obrotmacierzy(Cuboid &Miotator);
 
     void set_degree_axis();
 
@@ -102,38 +103,46 @@ Matrix<T, SIZE>::Matrix(T tmp[SIZE][SIZE]) {
 
 template <typename T, unsigned int SIZE>
 void Matrix<T, SIZE>::set_degree_axis(){
-    Matrix<T, SIZE> results;
-    std::cout << "Proszę podać oś oraz kąt obrotu wokół niej w postaci >x 30< " << std::endl;
+
+    std::cout << "Proszę podać oś oraz kąt obrotu wokół niej w postaci >x 30 lub y 23< " << std::endl;
     for(int i = 0; i < 30; ++i){
-        std::cin >> results.axis[i];
-        std::cin >> results.degrees[i];
+        std::cout << "Kółeczka pokazują i = " << i <<std::endl;
+        std::cin >> axis[i];
+        if(axis[i] != '.'){
+            std::cin >> degrees[i];
+        }
         char tmp;
-        tmp = results.axis[i];
+        tmp = axis[i];
         switch(tmp)
         {
         case 'x':
             std::cout << "Wczytano do osi x " << std::endl;
+            std::cin.ignore(10000, '\n');
             break;
 
         case 'y':
             std::cout << "Wczytano do osi y " << std::endl;
+            std::cin.ignore(10000, '\n');
             break;
 
         case 'z':
             std::cout << "Wczytano do osi z " << std::endl;
+            std::cin.ignore(10000, '\n');
             break;
 
         case '.':
             std::cout << "Skończono wczytywanie osi " << std::endl;
-            results.degrees[i] = 0;
+            degrees[i] = 0;
             i = 30;
+            std::cin.ignore(10000, '\n');
             break;
 
         default:
-            results.axis[i] = ' ';
-            results.degrees[i] = 0;
+            axis[i] = ' ';
+            degrees[i] = 0;
             --i;
             std::cout << "Podano niepoprawną oś możliwe to: x, y, z " << std::endl;
+            std::cin.ignore(10000, '\n');
             break;
         }
     }
@@ -146,13 +155,13 @@ void Matrix<T, SIZE>::obrot_x(T kat){
     if(SIZE == 3){
         value[0][0] = cos(rad);
         value[0][1] = -sin(rad);
-        value[0][2] = 0;
+        
         value[1][0] = sin(rad);
         value[1][1] = cos(rad);
-        value[1][2] = 0;
-        value[2][0] = 0;
-        value[2][1] = 0;
+        
         value[2][2] = 1;
+
+
     }
     else{
         std::cout << "Do not except that yet" << std::endl;
@@ -166,13 +175,13 @@ void Matrix<T, SIZE>::obrot_y(T kat){
     
     if(SIZE == 3){
         value[0][0] = cos(rad);
-        value[0][1] = 0;
+        
         value[0][2] = sin(rad);
-        value[1][0] = 0;
+        
         value[1][1] = 1;
-        value[1][2] = 0;
+        
         value[2][0] = -sin(rad);
-        value[2][1] = 0;
+        
         value[2][2] = cos(rad);
     }
     else{
@@ -186,12 +195,10 @@ void Matrix<T, SIZE>::obrot_z(T kat){
     
     if(SIZE == 3){
         value[0][0] = 1;
-        value[0][1] = 0;
-        value[0][2] = 0;
-        value[1][0] = 0;
+        
         value[1][1] = cos(rad);
         value[1][2] = -sin(rad);
-        value[2][0] = 0;
+        
         value[2][1] = sin(rad);
         value[2][2] = cos(rad);
     }
@@ -207,41 +214,43 @@ void Matrix<T, SIZE>::obrot_z(T kat){
  * 
  */
 template <typename T, unsigned int SIZE>
-void Matrix<T, SIZE>::obrotmacierzy(){
+void Matrix<T, SIZE>::obrotmacierzy(Cuboid &Miotator){
     char tmp;
     T Kaciwo;
-    for(int i=0; i < 30; ++i){  
-        tmp = axis[i];
-
+    for(int j=0; j < 30; ++j){  
+        tmp = axis[j];
         switch(tmp)
         {
         case 'x':
-            Kaciwo = degrees[i];
+            Kaciwo = degrees[j];
             obrot_x(Kaciwo);
             std::cout << "Zmlucono os x " << std::endl;
+            Miotator.throwing_Cuboid(this->value);
             break;
 
         case 'y':
-            Kaciwo = degrees[i];
+            Kaciwo = degrees[j];
             obrot_y(Kaciwo);
             std::cout << "Zmlucono os y " << std::endl;
+            Miotator.throwing_Cuboid(this->value);
             break;
 
         case 'z':
-            Kaciwo = degrees[i];
+            Kaciwo = degrees[j];
             obrot_z(Kaciwo);
             std::cout << "Zmlucono os z " << std::endl;
+            Miotator.throwing_Cuboid(this->value);
             break;
 
         case '.':
             std::cout << "Skończono mlucenie " << std::endl;
-            i = 30;
+            j = 30;
             break;
 
         default:
-            axis[i] = ' ';
-            degrees[i] = 0;
-            --i;
+            axis[j] = ' ';
+            degrees[j] = 0;
+            --j;
             std::cout << "UNEXCPECTED VIRUS OR MY PROGRAMMING " << std::endl;
             break;
         }
@@ -309,7 +318,9 @@ Vector<T, SIZE> Matrix<T, SIZE>::operator * (const Vector<T, SIZE> &tmp) const{
     Vector<T, SIZE> result;
     for (unsigned int i = 0; i < SIZE; ++i) {
         for (unsigned int j = 0; j < SIZE; ++j) {
-            result[i] += value[i][j] * tmp[j];
+            if(value[i][j] != 0){
+                result[i] += value[i][j] * tmp[j];
+            }
         }
     }
     return result;
@@ -364,6 +375,7 @@ const T &Matrix<T, SIZE>::operator () (unsigned int row, unsigned int column) co
     return value[row][column];
 }
 
+
 /******************************************************************************
  |  Przeciążenie dodawania macierzy                                                          |
  |  Argumenty:                                                                |
@@ -411,9 +423,11 @@ std::istream &operator >> (std::istream &in, Matrix<T, SIZE> &tmp) {
 template <typename T, unsigned int SIZE>
 std::ostream &operator << (std::ostream &out, const Matrix<T, SIZE> &tmp) {
     for (unsigned int i = 0; i < SIZE; ++i) {
+        out << "| ";
         for (unsigned int j = 0; j < SIZE; ++j) {
-            out << "| " << tmp(i, j) << " | "; //warto ustalic szerokosc wyswietlania dokladnosci liczb
+            out << tmp(i, j); //warto ustalic szerokosc wyswietlania dokladnosci liczb
         }
+        out << " |";
         std::cout << std::endl;
     }
     return out;

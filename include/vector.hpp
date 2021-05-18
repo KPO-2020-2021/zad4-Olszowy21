@@ -52,7 +52,6 @@ std::istream &operator >> (std::istream &in, Vector<T, SIZE> &tmp);
 template <typename T, unsigned int SIZE>
 std::ostream& operator << (std::ostream &out, Vector<T, SIZE> const &tmp);
 
-
 template <typename T, unsigned int SIZE>
 std::ostream& operator << (std::ostream &out, Vector<T, SIZE> const &tmp)
 {
@@ -152,7 +151,7 @@ template <typename T, unsigned int SIZE>
 void Vector<T, SIZE>::Load_vector(){
 
     T x,y,z;
-    std::cout<<"Proszę podać wektor przesunięcia"<<std::endl;
+    std::cout<<"Proszę podać wektor przesunięcia przykład: 10 2 3 <---> x y z"<<std::endl;
     std::cin>>x;
     std::cin>>y;
     std::cin>>z;
