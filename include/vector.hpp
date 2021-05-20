@@ -35,8 +35,6 @@ public:
 
     Vector operator * (const T &tmp);
 
-    // Vector operator * (Vector tmp);
-
     bool operator == (const Vector &tmp) const;
 
     const T &operator [] (unsigned int index) const;

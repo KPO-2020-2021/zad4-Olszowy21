@@ -248,25 +248,25 @@ void Cuboid::length_of_the_sides(){
 
     if((std::abs(side5 - side8) <= MIN_DIFF) && (std::abs(side6 - side7) <= MIN_DIFF)){
         std::cout <<"\n :)  Krotsze przeciwlegle boki sa sobie rowne" << std::endl;
-        std::cout <<"Dlugosc pierwszego boku: " << side5 << std::endl;
-        std::cout <<"Dlugosc drugiego boku: " << side6 << std::endl;
-        std::cout <<"Dlugosc trzeciego boku: " << side7 << std::endl;
-        std::cout <<"Dlugosc czwartego boku: "<< side8 << std::endl;
+        std::cout <<"Dlugosc pierwszego boku: " << std::setw(16) << std::fixed << std::setprecision(10) << side5 << std::endl;
+        std::cout <<"Dlugosc drugiego boku: " << std::setw(16) << std::fixed << std::setprecision(10) << side6 << std::endl;
+        std::cout <<"Dlugosc trzeciego boku: " << std::setw(16) << std::fixed << std::setprecision(10) << side7 << std::endl;
+        std::cout <<"Dlugosc czwartego boku: "<< std::setw(16) << std::fixed << std::setprecision(10) << side8 << std::endl;
     }
     else{
         std::cout <<"\n :/  Krotsze przeciwlegle boki nie sa sobie rowne!!!" << std::endl;
-        std::cout <<"Dlugosc pierwszego boku: " << side5 << std::endl;
-        std::cout <<"Dlugosc drugiego boku: " << side6 << std::endl;
-        std::cout <<"Dlugosc trzeciego boku: " << side7 << std::endl;
-        std::cout <<"Dlugosc czwartego boku: "<< side8 << std::endl;
+        std::cout <<"Dlugosc pierwszego boku: " << std::setw(16) << std::fixed << std::setprecision(10) << side5 << std::endl;
+        std::cout <<"Dlugosc drugiego boku: " << std::setw(16) << std::fixed << std::setprecision(10) << side6 << std::endl;
+        std::cout <<"Dlugosc trzeciego boku: " << std::setw(16) << std::fixed << std::setprecision(10) << side7 << std::endl;
+        std::cout <<"Dlugosc czwartego boku: "<< std::setw(16) << std::fixed << std::setprecision(10) << side8 << std::endl;
     }
 
     if((std::abs(side1 - side3) <= MIN_DIFF) && (std::abs(side2 - side4) <= MIN_DIFF)){
         std::cout <<"\n :)  Poprzeczne przeciwlegle boki sa sobie rowne" << std::endl;
-        std::cout <<"Dlugosc pierwszego boku: " << side1 << std::endl;
-        std::cout <<"Dlugosc drugiego boku: " << side2 << std::endl;
-        std::cout <<"Dlugosc trzeciego boku: " << side3 << std::endl;
-        std::cout <<"Dlugosc czwartego boku: "<< side4 << std::endl;
+        std::cout <<"Dlugosc pierwszego boku: " << std::setw(16) << std::fixed << std::setprecision(10) << side1 << std::endl;
+        std::cout <<"Dlugosc drugiego boku: " << std::setw(16) << std::fixed << std::setprecision(10) << side2 << std::endl;
+        std::cout <<"Dlugosc trzeciego boku: " << std::setw(16) << std::fixed << std::setprecision(10) << side3 << std::endl;
+        std::cout <<"Dlugosc czwartego boku: "<< std::setw(16) << std::fixed << std::setprecision(10) << side4 << std::endl;
     }
     else{
         std::cout <<"\n :/   Poprzeczne przeciwlegle boki nie sa sobie rowne!!!" << std::endl;

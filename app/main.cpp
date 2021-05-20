@@ -39,6 +39,7 @@ int main() {
 
        std::string File_name = "../datasets/cuboid.dat";
        const char* WSK_FILE = File_name.c_str();
+       char x;
        std::ofstream FILE;
        Cuboid cuboid = Cuboid();
        Vector3D Przesuniecie = Vector3D();
@@ -65,12 +66,13 @@ int main() {
        //
        Lacze.ZmienTrybRys(PzG::TR_3D);
 
+       Lacze.UstawZakresX(-50, 50);
+       Lacze.UstawZakresY(-50, 50);
+       Lacze.UstawZakresZ(-50, 50);
 
        if (!cuboid.ZapisWspolrzednychDoPliku( WSK_FILE )) { return 1; }
 
-  while(1){
-
-       char x;
+  while(x != 'k'){
 
        std::cout<<"\nWybieram : ( m - menu ) > ";
        std::cin>>x;
@@ -100,6 +102,8 @@ int main() {
               for(; tmp > 0; --tmp){
                      macierz.obrotmacierzy();
               }
+
+              cuboid.throwing_Cuboid(macierz);
 
               if (!cuboid.ZapisWspolrzednychDoPliku( WSK_FILE )) {
                      return 1;
@@ -144,7 +148,7 @@ int main() {
               break;
        case 'k':
               if (!cuboid.ZapisWspolrzednychDoPliku( WSK_FILE )) { return 1; }
-              exit(1);
+              std::cout<<" Dziękuję za używanie mojego programu ;)"<<std::endl;
               break;
        default:
               std::cout<<" Niepoprawna operacja, symbol m to MENU"<<std::endl;

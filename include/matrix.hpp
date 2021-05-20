@@ -60,19 +60,25 @@ std::ostream &operator << (std::ostream &out, Matrix<T, SIZE> const &mat);
  |  Argumenty:                                                                |
  |      Brak argumentow.                                                      |
  |  Zwraca:                                                                   |
- |      Macierz wypelnione wartoscia 0.                                       |
+ |      Macierz jedynkowa.                                       |
  */
 template <typename T, unsigned int SIZE>
 Matrix<T, SIZE>::Matrix() {
-    for (unsigned int i = 0; i < SIZE; ++i) {
-        for (unsigned int j = 0; j < SIZE; ++j) {
-            value[i][j] = 0;
-        }
-    }
-    for (int k = 0; k < 10; ++k) {
+
+    value[0][0] = 1;
+    value[0][1] = 0;
+    value[0][2] = 0;
+    value[1][0] = 0;
+    value[1][1] = 1;
+    value[1][2] = 0;
+    value[2][0] = 0;
+    value[2][1] = 0;
+    value[2][2] = 1;
+
+    for (int k = 0; k < 30; ++k) {
         axis[k] = ' ';
     }
-    for (int l = 0; l < 10; ++l) {
+    for (int l = 0; l < 30; ++l) {
         degrees[l] = 0;
     }
 }
@@ -105,7 +111,6 @@ void Matrix<T, SIZE>::set_degree_axis(){
 
     std::cout << "Proszę podać oś oraz kąt obrotu wokół niej w postaci >x 30 lub y 23< " << std::endl;
     for(int i = 0; i < 30; ++i){
-        std::cout << "Kółeczka pokazują i = " << i <<std::endl;
         std::cin >> axis[i];
         if(axis[i] != '.'){
             std::cin >> degrees[i];
@@ -115,22 +120,22 @@ void Matrix<T, SIZE>::set_degree_axis(){
         switch(tmp)
         {
         case 'x':
-            std::cout << "Wczytano do osi x " << std::endl;
+            //std::cout << "Wczytano do osi x " << std::endl;
             std::cin.ignore(10000, '\n');
             break;
 
         case 'y':
-            std::cout << "Wczytano do osi y " << std::endl;
+            //std::cout << "Wczytano do osi y " << std::endl;
             std::cin.ignore(10000, '\n');
             break;
 
         case 'z':
-            std::cout << "Wczytano do osi z " << std::endl;
+            //std::cout << "Wczytano do osi z " << std::endl;
             std::cin.ignore(10000, '\n');
             break;
 
         case '.':
-            std::cout << "Skończono wczytywanie osi " << std::endl;
+            //std::cout << "Skończono wczytywanie osi " << std::endl;
             degrees[i] = 0;
             i = 30;
             std::cin.ignore(10000, '\n');
@@ -154,12 +159,13 @@ void Matrix<T, SIZE>::obrot_x(T kat){
     if(SIZE == 3){
         value[0][0] = cos(rad);
         value[0][1] = -sin(rad);
-        
+        value[0][2] = 0;
         value[1][0] = sin(rad);
         value[1][1] = cos(rad);
-        
+        value[1][2] = 0;
+        value[2][0] = 0;
+        value[2][1] = 0;
         value[2][2] = 1;
-
 
     }
     else{
@@ -174,13 +180,13 @@ void Matrix<T, SIZE>::obrot_y(T kat){
     
     if(SIZE == 3){
         value[0][0] = cos(rad);
-        
+        value[0][1] = 0;
         value[0][2] = sin(rad);
-        
+        value[1][0] = 0;
         value[1][1] = 1;
-        
+        value[1][2] = 0;
         value[2][0] = -sin(rad);
-        
+        value[2][1] = 0;
         value[2][2] = cos(rad);
     }
     else{
@@ -194,10 +200,12 @@ void Matrix<T, SIZE>::obrot_z(T kat){
     
     if(SIZE == 3){
         value[0][0] = 1;
-        
+        value[0][1] = 0;
+        value[0][2] = 0;
+        value[1][0] = 0;
         value[1][1] = cos(rad);
         value[1][2] = -sin(rad);
-        
+        value[2][0] = 0;
         value[2][1] = sin(rad);
         value[2][2] = cos(rad);
     }
@@ -424,9 +432,9 @@ std::ostream &operator << (std::ostream &out, const Matrix<T, SIZE> &tmp) {
     for (unsigned int i = 0; i < SIZE; ++i) {
         out << "| ";
         for (unsigned int j = 0; j < SIZE; ++j) {
-            out << tmp(i, j); //warto ustalic szerokosc wyswietlania dokladnosci liczb
+            out << tmp(i, j) << ' '; //warto ustalic szerokosc wyswietlania dokladnosci liczb
         }
-        out << " |";
+        out << "|";
         std::cout << std::endl;
     }
     return out;

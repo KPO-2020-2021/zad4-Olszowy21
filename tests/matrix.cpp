@@ -10,15 +10,15 @@ TEST_CASE("Test konstruktorów bezparametrycznych")
 
     Matrix<double, 3> test;
 
-    test(0, 0) = 0;
+    test(0, 0) = 1;
     test(0, 1) = 0;
     test(0, 2) = 0;
     test(1, 0) = 0;
-    test(1, 1) = 0;
+    test(1, 1) = 1;
     test(1, 2) = 0;
     test(2, 0) = 0;
     test(2, 1) = 0;
-    test(2, 2) = 0;
+    test(2, 2) = 1;
 
     CHECK(macierz == test);
 }
@@ -119,7 +119,7 @@ TEST_CASE("Test operatora []")
     Strumien_out << macierz.operator[](0);
 
 
-    CHECK("0" == Strumien_out.str());
+    CHECK("1" == Strumien_out.str());
 }
 
 TEST_CASE("Test operatora ()")
@@ -129,6 +129,6 @@ TEST_CASE("Test operatora ()")
 
     Strumien_out << macierz(1, 1);
 
-    CHECK("0" == Strumien_out.str());
+    CHECK("1" == Strumien_out.str());
 }
 
