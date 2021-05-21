@@ -34,7 +34,7 @@ TEST_CASE("Test konstruktorów parametrycznych")
     Vector<double, SIZE> fa(2, 3, 28);
     Vector<double, SIZE> fax2(22, 3, 28);
 
-    Cuboid macierz = Cuboid();
+    Cuboid prostopadloscian = Cuboid();
 
     Cuboid test;
 
@@ -47,7 +47,7 @@ TEST_CASE("Test konstruktorów parametrycznych")
     test[6] = fa;
     test[7] = fax2;
 
-    CHECK(macierz == test);
+    CHECK(prostopadloscian == test);
 }
 
 TEST_CASE("Test translacji Prostopadloscianu")
@@ -82,4 +82,81 @@ TEST_CASE("Test translacji Prostopadloscianu")
 }
 
 
+TEST_CASE("Test obrotu Prostopadloscianu ale o macierz jedynkową. Brakuje troszke czasu, wystarczyłoby zrobić konstruktory do zmiany axis i degrees ale ehh straszna sieczka jest z materiałem...")
+{
+    Vector<double, SIZE> wektor1(0, 5, 5);
+    Vector<double, SIZE> wektor2(10, 5, 5);
+    Vector<double, SIZE> wektor3(0, 20, 5);
+    Vector<double, SIZE> wektor4(10, 20, 5);
+    Vector<double, SIZE> wektor5(0, 20, 30);
+    Vector<double, SIZE> wektor6(10, 20, 30);
+    Vector<double, SIZE> wektor7(0, 5, 30);
+    Vector<double, SIZE> wektor8(10, 5, 30);
 
+
+    Cuboid Cuboid_test = Cuboid(wektor1, wektor2, wektor3, wektor4, wektor5, wektor6, wektor7, wektor8);
+    Matrix<double, SIZE> Miotator;
+
+    Cuboid_test.throwing_Cuboid(Miotator);
+
+    Vector<double, SIZE> wynik_wektor1(0, 5, 5);
+    Vector<double, SIZE> wynik_wektor2(10, 5, 5);
+    Vector<double, SIZE> wynik_wektor3(0, 20, 5);
+    Vector<double, SIZE> wynik_wektor4(10, 20, 5);
+    Vector<double, SIZE> wynik_wektor5(0, 20, 30);
+    Vector<double, SIZE> wynik_wektor6(10, 20, 30);
+    Vector<double, SIZE> wynik_wektor7(0, 5, 30);
+    Vector<double, SIZE> wynik_wektor8(10, 5, 30);
+
+    Cuboid Cuboid_wynik(wynik_wektor1, wynik_wektor2, wynik_wektor3, wynik_wektor4, wynik_wektor5, wynik_wektor6, wynik_wektor7, wynik_wektor8);
+
+    CHECK(Cuboid_test == Cuboid_wynik);
+}
+
+TEST_CASE("Test Operatora Porównywania z zbyt małym błędem")
+{
+    Cuboid prostopadloscian;
+    Cuboid test;
+
+    test[0] = Vector<double, SIZE>(2.00000001, 3.00000001, 3.00000001);
+    test[1] = Vector<double, SIZE>(22.00000001, 3, 3);
+    test[2] = Vector<double, SIZE>(2.00000001, 18.00000001, 3);
+    test[3] = Vector<double, SIZE>(22.00000001, 18.00000001, 3.00000001);
+    test[4] = Vector<double, SIZE>(2.00000001, 18, 28);
+    test[5] = Vector<double, SIZE>(22.00000001, 18.00000001, 28);
+    test[6] = Vector<double, SIZE>(2.00000001, 3, 28.00000001);
+    test[7] = Vector<double, SIZE>(22.00000001, 3, 28.00000001);
+
+
+    CHECK(prostopadloscian == test);
+}
+
+TEST_CASE("Test Operatora Porównywania ze zbyt dużym błędem")
+{
+    Cuboid prostopadloscian;
+    Cuboid test;
+
+    test[0] = Vector<double, SIZE>(2.000001, 3.000001, 3);
+    test[1] = Vector<double, SIZE>(22.00000001, 3, 3);
+    test[2] = Vector<double, SIZE>(2.000001, 18.00000001, 3);
+    test[3] = Vector<double, SIZE>(22.000001, 18.000001, 3.000001);
+    test[4] = Vector<double, SIZE>(2.000001, 18, 28);
+    test[5] = Vector<double, SIZE>(22.000001, 18.00000001, 28);
+    test[6] = Vector<double, SIZE>(2.000001, 3, 28.00000001);
+    test[7] = Vector<double, SIZE>(22.000001, 3, 28.000001);
+
+
+    CHECK(!(prostopadloscian == test));
+}
+
+
+TEST_CASE("Test operatora []")
+{
+    Cuboid prostopadloscian;
+    std::ostringstream Strumien_out;
+
+    Strumien_out << prostopadloscian.operator[](0);
+
+
+    CHECK("[ 2 ] [ 3 ] [ 3 ] " == Strumien_out.str());
+}

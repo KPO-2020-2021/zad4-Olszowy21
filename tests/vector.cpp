@@ -110,4 +110,3 @@ TEST_CASE("Test operatora []")
 
     CHECK("1" == Strumien_out.str());
 }
-
