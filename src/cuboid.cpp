@@ -2,15 +2,14 @@
 
 
 
-template <typename T, unsigned int SIZE>
-std::ostream& operator << (std::ostream &out, Vector<double, SIZE> const &tmp){
-    
-    for (unsigned int i = 0; i < SIZE; ++i) {
-        out << "[ " << tmp[i] << " ] ";
-    }
-    return out;
-}
-
+/*!
+ * Przeciazenie operatora wypisywania na ekran.
+ * \param[in] out - strumien wyjsciowy, z ktorego maja zostac wpisane
+ *                     kolejne wspolrzedne.
+ * \param[in] tmp - skladowa klasy Cuboid z ktorej bedzie wypisywane
+ *                     wspolrzedne na ekran.
+ * 
+ */
 std::ostream &operator << (std::ostream &out, Cuboid const &tmp){
 
     for(unsigned int i = 0; i < SIZE+5; ++i){
@@ -39,6 +38,12 @@ const Vector<double, SIZE>& Cuboid::operator [] (unsigned int index) const{
     return top[index];
 }
 
+/*!
+ * Konstruktor dla prostopadłościanu z przypadkowymi wartościami.
+ *
+ * 
+ * 
+ */
 Cuboid::Cuboid(){
 
     top[0] = Vector<double, SIZE>(2, 3, 3);
@@ -52,6 +57,18 @@ Cuboid::Cuboid(){
 
 }
 
+/*!
+ * Konstruktor dla prostopadłościanu z przychodzącymi wartościami.
+ * \param[in] first - wektor 1 dla prostopadłościanu. 
+ * \param[in] second - wektor 1 dla prostopadłościanu. 
+ * \param[in] third - wektor 1 dla prostopadłościanu. 
+ * \param[in] fourth - wektor 1 dla prostopadłościanu. 
+ * \param[in] fifth - wektor 1 dla prostopadłościanu. 
+ * \param[in] sixth - wektor 1 dla prostopadłościanu. 
+ * \param[in] seventh - wektor 1 dla prostopadłościanu. 
+ * \param[in] eigth - wektor 1 dla prostopadłościanu. 
+ * 
+ */
 Cuboid::Cuboid( Vector<double, SIZE> first, Vector<double, SIZE> second, Vector<double, SIZE> third, Vector<double, SIZE> fourth,
                 Vector<double, SIZE> fifth, Vector<double, SIZE> sixth,  Vector<double, SIZE> seventh, Vector<double, SIZE> eigth ){
     
@@ -188,11 +205,9 @@ bool Cuboid::ZapisWspolrzednychDoPliku( const char *File_name)
 
 /*!
  * Metoda sprawdzania dlugosci przeciwleglych bokow aktualnej figury
- * znajdujacej sie w klasie rectangle ( prostokata ).
- * \param[in] tmp - nazwa macierzy która przysłuży się do obracania punktow prostokata
+ * znajdujacej sie w klasie cuboid ( prostopadłościanu ).
  *  
- * \retval true - gdy boki prostokata sa rowne
- * \retval false - w przypadku przeciwnym.                       
+ * \retval pozytywne lub negatywne emotki z wiadomością o długościach boków.                
  */
 void Cuboid::length_of_the_sides(){
     

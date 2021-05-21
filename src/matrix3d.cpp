@@ -1,80 +1,13 @@
-#pragma once
+#include "matrix3d.hpp"
 
-#include "vector.hpp"
 
 /*!
- * \file  matrix.hh
- *  
- *  Plik zawiera klasę Matrix ~ macierzy
- *  
- */
-
-/*!
-  * \brief Zestaw dla klasy Matrix
-  *
-  * Klasa posiada konstruktory, metody oraz
-  * wartości typu szablonowego.
-  */
-template< typename T, unsigned int SIZE >
-class Matrix {
-
-    T value[SIZE][SIZE];                  // Wartosci macierzy
-
-    char axis[30];
-
-    int degrees[30];
-
-public:
-
-// Konstruktory klasy
-
-    Matrix(T tmp[SIZE][SIZE]);
-
-    Matrix();
-
-// Metody
-
-    Vector<T, SIZE> operator * (const Vector<T, SIZE> &tmp) const;
-
-    Matrix operator + (Matrix tmp);
-
-    T  &operator () (unsigned int row, unsigned int column);
-    
-    const T &operator () (unsigned int row, unsigned int column) const;
-
-    void obrotmacierzy();
-
-    void set_degree_axis();
-
-    void obrot_x(T kat);
-
-    void obrot_y(T kat);
-
-    void obrot_z(T kat);
-
-    bool operator == (const Matrix tmp) const;
-
-    const T &operator [] (unsigned int index) const;
-    
-    T &operator [] (unsigned int index);
-
-};
-
-
-template <typename T, unsigned int SIZE>
-std::istream &operator >> (std::istream &in, Matrix<T, SIZE> &mat);
-
-template <typename T, unsigned int SIZE>
-std::ostream &operator << (std::ostream &out, Matrix<T, SIZE> const &mat);
-
-/*!
- * Konstruktor dla macierzy jedynkowej.
- *
+ * Konstruktor instancji macierzy3D.
  * 
  * 
  */
-template <typename T, unsigned int SIZE>
-Matrix<T, SIZE>::Matrix() {
+template <>
+Matrix3D::Matrix() {
 
     value[0][0] = 1;
     value[0][1] = 0;
@@ -101,8 +34,8 @@ Matrix<T, SIZE>::Matrix() {
  * 
  * 
  */
-template <typename T, unsigned int SIZE>
-Matrix<T, SIZE>::Matrix(T tmp[SIZE][SIZE]) {
+template <>
+Matrix3D::Matrix(double tmp[SIZE][SIZE]) {
     for (unsigned int i = 0; i < SIZE; ++i) {
         for (unsigned int j = 0; j < SIZE; ++j) {
             value[i][j] = tmp[i][j];
@@ -122,8 +55,8 @@ Matrix<T, SIZE>::Matrix(T tmp[SIZE][SIZE]) {
  * 
  * 
  */
-template <typename T, unsigned int SIZE>
-void Matrix<T, SIZE>::set_degree_axis(){
+template <>
+void Matrix3D::set_degree_axis(){
 
     std::cout << "Proszę podać oś oraz kąt obrotu wokół niej w postaci >x 30 lub y 23< " << std::endl;
     for(int i = 0; i < 30; ++i){
@@ -174,20 +107,20 @@ void Matrix<T, SIZE>::set_degree_axis(){
  * 
  * 
  */
-template <typename T, unsigned int SIZE>
-void Matrix<T, SIZE>::obrot_x(T kat){
-    T rad = kat * M_PI / 180;
+template <>
+void Matrix3D::obrot_x(double kat){
+    double rad = kat * M_PI / 180;
     
     if(SIZE == 3){
-        value[0][0] = value[0][0] * cos(rad);
-        value[0][1] = value[0][1] * -sin(rad);
+        value[0][0] = cos(rad);
+        value[0][1] = -sin(rad);
         value[0][2] = 0;
-        value[1][0] = value[1][0] * sin(rad);
-        value[1][1] = value[1][1] * cos(rad);
+        value[1][0] = sin(rad);
+        value[1][1] = cos(rad);
         value[1][2] = 0;
         value[2][0] = 0;
         value[2][1] = 0;
-        value[2][2] = value[2][2] * 1;
+        value[2][2] = 1;
 
     }
     else{
@@ -201,20 +134,20 @@ void Matrix<T, SIZE>::obrot_x(T kat){
  * 
  * 
  */
-template <typename T, unsigned int SIZE>
-void Matrix<T, SIZE>::obrot_y(T kat){
-    T rad = kat * M_PI / 180;
+template <>
+void Matrix3D::obrot_y(double kat){
+    double rad = kat * M_PI / 180;
     
     if(SIZE == 3){
-        value[0][0] = value[0][0] * cos(rad);
+        value[0][0] = cos(rad);
         value[0][1] = 0;
-        value[0][2] = value[0][2] * sin(rad);
+        value[0][2] = sin(rad);
         value[1][0] = 0;
-        value[1][1] = value[1][1] * 1;
+        value[1][1] = 1;
         value[1][2] = 0;
-        value[2][0] = value[2][0] * -sin(rad);
+        value[2][0] = -sin(rad);
         value[2][1] = 0;
-        value[2][2] = value[2][2] * cos(rad);
+        value[2][2] = cos(rad);
     }
     else{
         std::cout << "Do not except that yet" << std::endl;
@@ -227,20 +160,20 @@ void Matrix<T, SIZE>::obrot_y(T kat){
  * 
  * 
  */
-template <typename T, unsigned int SIZE>
-void Matrix<T, SIZE>::obrot_z(T kat){
-    T rad = kat * M_PI / 180;
+template <>
+void Matrix3D::obrot_z(double kat){
+    double rad = kat * M_PI / 180;
     
     if(SIZE == 3){
-        value[0][0] = value[0][0] * 1;
+        value[0][0] = 1;
         value[0][1] = 0;
         value[0][2] = 0;
         value[1][0] = 0;
-        value[1][1] = value[1][1] * cos(rad);
-        value[1][2] = value[1][2] * -sin(rad);
+        value[1][1] = cos(rad);
+        value[1][2] = -sin(rad);
         value[2][0] = 0;
-        value[2][1] = value[2][1] * sin(rad);
-        value[2][2] = value[2][2] * cos(rad);
+        value[2][1] = sin(rad);
+        value[2][2] = cos(rad);
     }
     else{
         std::cout << "Do not except that yet" << std::endl;
@@ -253,10 +186,10 @@ void Matrix<T, SIZE>::obrot_z(T kat){
  * 
  * 
  */
-template <typename T, unsigned int SIZE>
-void Matrix<T, SIZE>::obrotmacierzy(){
+template  <>
+void Matrix3D::obrotmacierzy(){
     char tmp;
-    T Kaciwo;
+    double Kaciwo;
     for(int j=0; j < 30; ++j){  
         tmp = axis[j];
         switch(tmp)
@@ -264,16 +197,22 @@ void Matrix<T, SIZE>::obrotmacierzy(){
         case 'x':
             Kaciwo = degrees[j];
             obrot_x(Kaciwo);
+            std::cout << "Zmlucono os x " << std::endl;
+            //Miotator.throwing_Cuboid(this->value);
             break;
 
         case 'y':
             Kaciwo = degrees[j];
             obrot_y(Kaciwo);
+            std::cout << "Zmlucono os y " << std::endl;
+            //Miotator.throwing_Cuboid(this->value);
             break;
 
         case 'z':
             Kaciwo = degrees[j];
             obrot_z(Kaciwo);
+            std::cout << "Zmlucono os z " << std::endl;
+            //Miotator.throwing_Cuboid(this->value);
             break;
 
         case '.':
@@ -298,8 +237,8 @@ void Matrix<T, SIZE>::obrotmacierzy(){
  * \retval true - gdy obie sa sobie rowne.
  * \retval false - w przypadku przeciwnym.
  */
-template <typename T, unsigned int SIZE>
-bool Matrix<T, SIZE>::operator == (const Matrix<T, SIZE> tmp) const{
+template  <>
+bool Matrix3D::operator == (const Matrix3D tmp) const{
     
     for(unsigned int i = 0; i < SIZE; i++){
         for(unsigned int j = 0; j < SIZE; j++){
@@ -317,8 +256,8 @@ bool Matrix<T, SIZE>::operator == (const Matrix<T, SIZE> tmp) const{
  *                      liczby czesc tablicy wspolrzednych.
  * 
  */
-template <typename T, unsigned int SIZE>
-T &Matrix<T, SIZE>::operator [] (unsigned int index){
+template <>
+double &Matrix3D::operator [] (unsigned int index){
 if ( index >= SIZE*2 ) {
         std::cerr << "Error: Macierz jest poza zasiegiem!" << std::endl;
 } // lepiej byłoby rzucić wyjątkiem stdexcept
@@ -332,8 +271,8 @@ return value[index][index];
  *                      liczby czesc tablicy wspolrzednych.
  * 
  */
-template <typename T, unsigned int SIZE>
-const T &Matrix<T, SIZE>::operator [] (unsigned int index) const{
+template <>
+const double &Matrix3D::operator [] (unsigned int index) const{
     return value[index][index];
 }
 
@@ -344,9 +283,9 @@ const T &Matrix<T, SIZE>::operator [] (unsigned int index) const{
  * 
  * \retval Wynik mnożenia.
  */
-template<typename T, unsigned int SIZE>
-Vector<T, SIZE> Matrix<T, SIZE>::operator * (const Vector<T, SIZE> &tmp) const{
-    Vector<T, SIZE> result;
+template <>
+Vector3D Matrix3D::operator * (const Vector3D &tmp) const{
+    Vector3D result;
     for (unsigned int i = 0; i < SIZE; ++i) {
         for (unsigned int j = 0; j < SIZE; ++j) {
             if(value[i][j] != 0){
@@ -365,8 +304,8 @@ Vector<T, SIZE> Matrix<T, SIZE>::operator * (const Vector<T, SIZE> &tmp) const{
  * 
  * \retval wyłuskaną z chronionej części macierzy wartość typu T.
  */
-template <typename T, unsigned int SIZE>
-T &Matrix<T, SIZE>::operator () (unsigned int row, unsigned int column) {
+template <>
+double &Matrix3D::operator () (unsigned int row, unsigned int column) {
 
     if (row >= SIZE) {
         std::cout << "Error: Macierz jest poza zasiegiem"; 
@@ -390,8 +329,8 @@ T &Matrix<T, SIZE>::operator () (unsigned int row, unsigned int column) {
  * 
  * \retval wyłuskaną z chronionej części macierzy wartość typu T.
  */
-template <typename T, unsigned int SIZE>
-const T &Matrix<T, SIZE>::operator () (unsigned int row, unsigned int column) const {
+template <>
+const double &Matrix3D::operator () (unsigned int row, unsigned int column) const {
 
     if (row >= SIZE) {
         std::cerr << "Error: Macierz jest poza zasiegiem";
@@ -413,9 +352,9 @@ const T &Matrix<T, SIZE>::operator () (unsigned int row, unsigned int column) co
  * 
  * \retval Wynik dodawania.
  */
-template <typename T, unsigned int SIZE>
-Matrix<T, SIZE> Matrix<T, SIZE>::operator + (Matrix<T, SIZE> tmp){
-    Matrix<T, SIZE> result;
+template <>
+Matrix3D Matrix3D::operator + (Matrix3D tmp){
+    Matrix3D result;
     for (unsigned int i = 0; i < SIZE; ++i) {
         for (unsigned int j = 0; j < SIZE; ++j) {
             result(i, j) = this->value[i][j] + tmp(i, j);
@@ -432,8 +371,8 @@ Matrix<T, SIZE> Matrix<T, SIZE>::operator + (Matrix<T, SIZE> tmp){
  *                     wspolrzedne na ekran.
  * 
  */
-template <typename T, unsigned int SIZE>
-std::istream &operator >> (std::istream &in, Matrix<T, SIZE> &tmp) {
+template <>
+std::istream &operator >> (std::istream &in, Matrix3D &tmp) {
     for (unsigned int i = 0; i < SIZE; ++i) {
         for (unsigned int j = 0; j < SIZE; ++j) {
             in >> tmp(i, j);
@@ -451,8 +390,8 @@ std::istream &operator >> (std::istream &in, Matrix<T, SIZE> &tmp) {
  *                     wspolrzedne na ekran.
  * 
  */
-template <typename T, unsigned int SIZE>
-std::ostream &operator << (std::ostream &out, const Matrix<T, SIZE> &tmp) {
+template <>
+std::ostream &operator << (std::ostream &out, const Matrix3D &tmp) {
     for (unsigned int i = 0; i < SIZE; ++i) {
         out << "| ";
         for (unsigned int j = 0; j < SIZE; ++j) {

@@ -13,14 +13,9 @@
 #include "vector3d.hpp"
 #include "lacze_do_gnuplota.hh"
 
-/*
- * Simple main program that demontrates how access
- * CMake definitions (here the version number) from source code.
- */
 
 /*!
- * Simple main program that demontrates how access
- * CMake definitions (here the version number) from source code.
+ * Main z obsługą.
  * 
  * 
  */
@@ -66,11 +61,13 @@ int main() {
        //
        Lacze.ZmienTrybRys(PzG::TR_3D);
 
-       Lacze.UstawZakresX(-50, 50);
-       Lacze.UstawZakresY(-50, 50);
+       Lacze.UstawZakresX(-70, 70);
+       Lacze.UstawZakresY(-70, 70);
        Lacze.UstawZakresZ(-50, 50);
 
        if (!cuboid.ZapisWspolrzednychDoPliku( WSK_FILE )) { return 1; }
+
+       Lacze.Rysuj();
 
   while(x != 'k'){
 
@@ -113,8 +110,14 @@ int main() {
 
               break;
        case 't':
-              // NALEŻY SPRAWDZIĆ CZY W OGÓLE MACIERZ JEST WYPEŁNIONA
+              
               cuboid.throwing_Cuboid(macierz);
+
+              if (!cuboid.ZapisWspolrzednychDoPliku( WSK_FILE )) {
+                     return 1;
+              }
+
+              Lacze.Rysuj();
 
               break;
        case 'r':

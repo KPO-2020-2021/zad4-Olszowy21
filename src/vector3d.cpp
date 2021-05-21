@@ -1,67 +1,4 @@
-#pragma once
-
-#include <iomanip>
-#include <fstream>
-#include <iostream>
-#include <cmath>
-#include "size.hpp"
-#include <math.h>
-#include <string>
-#include <sstream>
-
-#define MIN_DIFF 0.0000001
-
-/*!
- * \file  vector.hh
- *  
- *  Plik zawiera klasę Vector ~ wektor oraz
- *  jest ojcem dla wszystkich bibliotek wbudowanych.
- *  
- */
-
-/*!
-  * \brief Zestaw dla klasy Vector
-  *
-  * Klasa posiada konstruktory, metody oraz
-  * wartości typu szablonowego.
-  */
-template<typename T, unsigned int SIZE>
-class Vector{
-    
-    T size[SIZE];     //Tablica wektora
-
-public:
-    
-// Konstruktory
-
-    Vector();
-
-    Vector(T tmp[SIZE]);
-
-    Vector(T x, T y, T z );
-
-// Metody
-
-    Vector operator + (const Vector &tmp);
-
-    Vector operator - (const Vector &tmp);
-
-    Vector operator * (const T &tmp);
-
-    bool operator == (const Vector &tmp) const;
-
-    const T &operator [] (unsigned int index) const;
-
-    T &operator [] (unsigned int index);
-    
-    void Load_vector(); 
-};
-
-template <typename T, unsigned int SIZE>
-std::istream &operator >> (std::istream &in, Vector<T, SIZE> &tmp);
-
-template <typename T, unsigned int SIZE>
-std::ostream& operator << (std::ostream &out, Vector<T, SIZE> const &tmp);
+#include "vector3d.hpp"
 
 
 /*!
@@ -72,8 +9,8 @@ std::ostream& operator << (std::ostream &out, Vector<T, SIZE> const &tmp);
  *                      wyjscie.
  * 
  */
-template <typename T, unsigned int SIZE>
-std::ostream& operator << (std::ostream &out, Vector<T, SIZE> const &tmp)
+template <>
+std::ostream& operator << (std::ostream &out, Vector3D const &tmp)
 {
     for (unsigned int i = 0; i < SIZE; ++i) {
         out << "[ " << tmp[i] << " ] ";
@@ -89,8 +26,8 @@ std::ostream& operator << (std::ostream &out, Vector<T, SIZE> const &tmp)
  *                      z wejscia.
  * 
  */
-template <typename T, unsigned int SIZE>
-std::istream &operator >> (std::istream &in, Vector<T, SIZE> &tmp) {
+template <>
+std::istream &operator >> (std::istream &in, Vector3D &tmp) {
     for (unsigned int i = 0; i < SIZE; ++i) {
         in >> tmp[i];
     }
@@ -104,10 +41,10 @@ std::istream &operator >> (std::istream &in, Vector<T, SIZE> &tmp) {
  * 
  * 
  */
-template<typename T, unsigned int SIZE>
-Vector<T, SIZE>::Vector(){
+template <>
+Vector3D::Vector(){
     for (unsigned int i = 0; i < SIZE; ++i){
-        this->size[i] = T();
+        this->size[i] = double();
     }
 }
 
@@ -117,8 +54,8 @@ Vector<T, SIZE>::Vector(){
  * 
  * 
  */
-template<typename T, unsigned int SIZE>
-Vector<T, SIZE>::Vector(T tmp[SIZE]){
+template <>
+Vector3D::Vector(double tmp[SIZE]){
     for (unsigned int i = 0; i < SIZE; ++i) {
         this->size[i] = tmp[i];
     }   
@@ -130,8 +67,8 @@ Vector<T, SIZE>::Vector(T tmp[SIZE]){
  * \param[in] y - wartość typu szablonu do wpisania wartości y wektora. 
  * \param[in] z - wartość typu szablonu do wpisania wartości z wektora. 
  */
-template<typename T, unsigned int SIZE>
-Vector<T, SIZE>::Vector(T x, T y, T z ){
+template <> 
+Vector3D::Vector(double x, double y, double z ){
     this->size[0] = x;
     this->size[1] = y;
     this->size[2] = z;
@@ -144,9 +81,9 @@ Vector<T, SIZE>::Vector(T x, T y, T z ){
  * 
  * \retval Wynik odejmowania.
  */
-template<typename T, unsigned int SIZE>
-Vector<T, SIZE> Vector<T, SIZE>::operator - (const Vector &tmp){
-    Vector<T, SIZE> result;
+template <>
+Vector3D Vector3D::operator - (const Vector &tmp){
+    Vector3D result;
     for (unsigned int i = 0; i < SIZE; ++i) {
         result[i] = size[i] -= tmp[i];
     }
@@ -159,9 +96,9 @@ Vector<T, SIZE> Vector<T, SIZE>::operator - (const Vector &tmp){
  * 
  * \retval Wynik dodawania.
  */
-template<typename T, unsigned int SIZE>
-Vector<T, SIZE> Vector<T, SIZE>::operator + (const Vector &tmp){
-    Vector result;
+template <>
+Vector3D Vector3D::operator + (const Vector &tmp){
+    Vector3D result;
     for (unsigned int i = 0; i < SIZE; ++i) {
         result[i] = size[i] += tmp[i];
     }
@@ -174,9 +111,9 @@ Vector<T, SIZE> Vector<T, SIZE>::operator + (const Vector &tmp){
  * 
  * \retval Wynik mnożenia.
  */
-template <typename T, unsigned int SIZE>
-Vector<T, SIZE> Vector<T, SIZE>::operator * (const T &tmp){
-    Vector<T, SIZE> result;
+template <>
+Vector3D Vector3D::operator * (const double &tmp){
+    Vector3D result;
     for (unsigned int i = 0; i < SIZE; ++i) {
         result[i] = size[i] *= tmp;
     }
@@ -190,8 +127,8 @@ Vector<T, SIZE> Vector<T, SIZE>::operator * (const T &tmp){
  * \retval true - gdy oba sa sobie rowne.
  * \retval false - w przypadku przeciwnym.
  */
-template <typename T, unsigned int SIZE>
-bool Vector<T, SIZE>::operator == (const Vector &tmp) const{
+template <>
+bool Vector3D::operator == (const Vector &tmp) const{
     if((std::abs(this->size[0] - tmp.size[0]) <= MIN_DIFF ) && (std::abs(this->size[1] - tmp.size[1]) <= MIN_DIFF ) && (std::abs(this->size[2] - tmp.size[2]) <= MIN_DIFF )){
         return true;
     }
@@ -204,9 +141,9 @@ bool Vector<T, SIZE>::operator == (const Vector &tmp) const{
  *                      liczby czesc tablicy wspolrzednych.
  * 
  */
-template <typename T, unsigned int SIZE>
-const T &Vector<T, SIZE>::operator [] (unsigned int index) const{
-    if (index < 0 || index >= SIZE) {
+template <>
+const double &Vector3D::operator [] (unsigned int index) const{
+    if (index >= SIZE) {
         std::cerr << "Error: Wektor jest poza zasiegiem!" << std::endl;
     }
     return size[index];
@@ -218,9 +155,9 @@ const T &Vector<T, SIZE>::operator [] (unsigned int index) const{
  *                      liczby czesc tablicy wspolrzednych.
  * 
  */ 
-template <typename T, unsigned int SIZE>
-T &Vector<T, SIZE>::operator [] (unsigned int index){
-    if (index < 0 || index >= SIZE) {
+template <>
+double &Vector3D::operator [] (unsigned int index){
+    if (index >= SIZE) {
         std::cerr << "Error: Wektor jest poza zasiegiem!" << std::endl;
     }
     return size[index];
@@ -231,10 +168,10 @@ T &Vector<T, SIZE>::operator [] (unsigned int index){
  *
  *                       
  */
-template <typename T, unsigned int SIZE>
-void Vector<T, SIZE>::Load_vector(){
+template <>
+void Vector3D::Load_vector(){
 
-    T x,y,z;
+    double x,y,z;
     std::cout<<"Proszę podać wektor przesunięcia przykład: 10 2 3 <---> x y z"<<std::endl;
     std::cin>>x;
     std::cin>>y;

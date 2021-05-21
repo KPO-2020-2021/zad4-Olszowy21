@@ -2,6 +2,19 @@
 
 #include "matrix.hpp"
 
+/*!
+ * \file  cuboid.hh
+ *  
+ *  Plik zawiera klasę cuboid ~ prostopadłościanu
+ *  
+ */
+
+/*!
+  * \brief Zestaw dla klasy Cuboid
+  *
+  * Klasa posiada konstruktory, metody oraz
+  * wartości klasy Vector jako współrzędne prostopadłościanu.
+  */
 class Cuboid{
 
     Vector<double, SIZE> top[SIZE+5];
